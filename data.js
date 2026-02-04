@@ -14,7 +14,7 @@ const newsData = [
     "tagColor": "bg-blue-100 text-blue-700",
     "date": "2026-02-04",
     "title": "供应链最新消息：CoWoS 产能扩充",
-    "summary": "截至 2026-02-04，台积电先进封装产能利用率达到 91%。",
+    "summary": "截至 2026-02-04，台积电先进封装产能利用率达到 90%。",
     "source": "Supply Chain Monitor"
   },
   {
