@@ -3,53 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPU 行业情报看板 (Auto-Update)</title>
+    <title>GPU 行业情报看板 2025</title>
+    <!-- 引入 Tailwind CSS 进行样式设计 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Chart.js 进行图表绘制 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 Phosphor Icons 图标库 -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- 关键：引用自动生成的数据文件 -->
+    <!-- 关键：引入外部动态数据 -->
     <script src="data.js"></script>
+    <style>
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+    </style>
 </head>
-<body class="p-6 bg-slate-50 font-sans">
-    <div class="max-w-4xl mx-auto">
-        <header class="mb-6 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-slate-900">GPU 行业情报看板</h1>
-            <span class="text-xs text-slate-500 bg-white border px-3 py-1 rounded-full">
-                上次更新: <script>document.write(new Date().toLocaleDateString())</script>
-            </span>
+<body class="p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
+                    <i class="ph-fill ph-cpu text-blue-600"></i> GPU 行业情报看板
+                </h1>
+                <p class="text-slate-500 mt-1 ml-1">2026年全球图形与AI计算市场实时追踪</p>
+            </div>
+            <div class="text-right">
+                <span class="bg-white border border-slate-200 px-3 py-1 rounded-full text-xs text-slate-600 font-medium">
+                    数据更新: <span id="current-date"></span>
+                </span>
+            </div>
         </header>
-        
-        <!-- 新闻列表区域 -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-                <i class="ph-fill ph-newspaper text-blue-600"></i> 最新情报
-            </h2>
-            <div id="news-container" class="space-y-3">
-                <!-- 数据将通过 JS 加载 -->
+
+        <!-- KPI Cards (静态展示，后续可改为动态) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="card p-6 flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">AI GPU 出货指数</p>
+                    <h3 class="text-2xl font-bold mt-1 text-slate-800">1,250w+</h3>
+                    <p class="text-xs mt-1 text-green-600 font-medium">+45% <span class="text-slate-400 font-normal">较上季度</span></p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-full text-blue-600"><i class="ph-fill ph-trend-up text-2xl"></i></div>
+            </div>
+            <div class="card p-6 flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">NVIDIA 市场份额</p>
+                    <h3 class="text-2xl font-bold mt-1 text-slate-800">92.4%</h3>
+                    <p class="text-xs mt-1 text-green-600 font-medium">+1.2% <span class="text-slate-400 font-normal">主导地位稳固</span></p>
+                </div>
+                <div class="p-3 bg-green-50 rounded-full text-green-600"><i class="ph-fill ph-chart-pie-slice text-2xl"></i></div>
+            </div>
+            <div class="card p-6 flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">行业总市值趋势</p>
+                    <h3 class="text-2xl font-bold mt-1 text-slate-800">$4.2T</h3>
+                    <p class="text-xs mt-1 text-green-600 font-medium">+8.5% <span class="text-slate-400 font-normal">持续增长</span></p>
+                </div>
+                <div class="p-3 bg-purple-50 rounded-full text-purple-600"><i class="ph-fill ph-currency-dollar text-2xl"></i></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Charts -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Trend Chart -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">计算需求趋势 (AI vs 消费级)</h3>
+                    <div class="h-[300px]">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Market Share -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">2025 数据中心 GPU 市场格局</h3>
+                    <div class="h-[200px]">
+                        <canvas id="shareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: News Feed -->
+            <div class="lg:col-span-1">
+                <div class="card h-full flex flex-col overflow-hidden" style="max-height: 700px;">
+                    <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="ph-fill ph-newspaper"></i> 最新情报
+                        </h3>
+                        <span class="text-xs text-slate-400">实时源</span>
+                    </div>
+                    
+                    <div class="overflow-y-auto p-4 space-y-4" id="news-container">
+                        <!-- News items will be injected here via JS -->
+                        <div class="text-center py-4 text-slate-400 text-sm" id="loading-msg">正在加载数据...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 渲染逻辑
-        const container = document.getElementById('news-container');
-        // 检查 data.js 是否加载成功
-        if (typeof newsData !== 'undefined') {
-            newsData.forEach(item => {
+        // 1. 设置日期
+        document.getElementById('current-date').innerText = new Date().toISOString().split('T')[0];
+
+        // 2. 渲染新闻 (从 data.js 读取全局变量 newsData)
+        const newsContainer = document.getElementById('news-container');
+        
+        // 检查数据是否存在
+        if (typeof newsData !== 'undefined' && newsData.length > 0) {
+            document.getElementById('loading-msg').style.display = 'none'; // 隐藏加载提示
+            
+            newsData.forEach(news => {
                 const html = `
-                <a href="${item.url}" target="_blank" class="block p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
-                    <div class="flex justify-between mb-1">
-                        <span class="${item.tagColor} text-[10px] px-2 py-0.5 rounded font-bold">${item.category}</span>
-                        <span class="text-xs text-slate-400">${item.date}</span>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-sm">${item.title}</h3>
-                    <p class="text-xs text-slate-500 mt-1">${item.summary}</p>
-                </a>`;
-                container.innerHTML += html;
+                    <a href="${news.url || '#'}" target="_blank" class="block border-b border-slate-100 pb-4 last:border-0 last:pb-0 hover:bg-slate-50 transition-colors rounded p-2 -mx-2">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="${news.tagColor || 'bg-gray-100 text-gray-700'} text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">${news.category || 'General'}</span>
+                            <span class="text-xs text-slate-400">${news.date}</span>
+                        </div>
+                        <h4 class="font-bold text-sm text-slate-800 mb-1 leading-snug">${news.title}</h4>
+                        <p class="text-xs text-slate-500 line-clamp-2 mb-2">${news.summary}</p>
+                        <div class="flex items-center gap-1 text-xs text-slate-400">
+                            <i class="ph-fill ph-globe"></i> ${news.source}
+                        </div>
+                    </a>
+                `;
+                newsContainer.insertAdjacentHTML('beforeend', html);
             });
         } else {
-            container.innerHTML = '<p class="text-red-500 text-sm p-4">数据正在抓取中，请稍后刷新页面...</p>';
+            document.getElementById('loading-msg').innerText = '暂无最新数据，请等待爬虫运行完成。';
         }
+
+        // 3. 图表配置 (此处保持静态，如果需要动态也可以改成从 data.js 读取)
+        // 趋势图
+        const ctxTrend = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctxTrend, {
+            type: 'line',
+            data: {
+                labels: ['24-Q1', '24-Q2', '24-Q3', '24-Q4', '25-Q1'],
+                datasets: [{
+                    label: 'AI/数据中心',
+                    data: [120, 155, 190, 240, 310],
+                    borderColor: '#7c3aed', // Purple
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: '消费级/游戏',
+                    data: [300, 290, 310, 340, 330],
+                    borderColor: '#2563eb', // Blue
+                    borderWidth: 2,
+                    tension: 0.4,
+                    borderDash: [5, 5]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' } },
+                scales: { y: { beginAtZero: false, grid: { display: true, color: '#f1f5f9' } }, x: { grid: { display: false } } }
+            }
+        });
+
+        // 市场份额图
+        const ctxShare = document.getElementById('shareChart').getContext('2d');
+        new Chart(ctxShare, {
+            type: 'bar',
+            data: {
+                labels: ['NVIDIA', 'AMD', 'Intel/Other'],
+                datasets: [{
+                    label: '市场份额 (%)',
+                    data: [92, 5, 3],
+                    backgroundColor: ['#76b900', '#ed1c24', '#0071c5'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { grid: { display: false } } }
+            }
+        });
     </script>
 </body>
 </html>
