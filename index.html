@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU 行业情报看板 (Auto-Update)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- 关键：引用自动生成的数据文件 -->
+    <script src="data.js"></script>
+</head>
+<body class="p-6 bg-slate-50 font-sans">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-slate-900">GPU 行业情报看板</h1>
+            <span class="text-xs text-slate-500 bg-white border px-3 py-1 rounded-full">
+                上次更新: <script>document.write(new Date().toLocaleDateString())</script>
+            </span>
+        </header>
+        
+        <!-- 新闻列表区域 -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <i class="ph-fill ph-newspaper text-blue-600"></i> 最新情报
+            </h2>
+            <div id="news-container" class="space-y-3">
+                <!-- 数据将通过 JS 加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 渲染逻辑
+        const container = document.getElementById('news-container');
+        // 检查 data.js 是否加载成功
+        if (typeof newsData !== 'undefined') {
+            newsData.forEach(item => {
+                const html = `
+                <a href="${item.url}" target="_blank" class="block p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+                    <div class="flex justify-between mb-1">
+                        <span class="${item.tagColor} text-[10px] px-2 py-0.5 rounded font-bold">${item.category}</span>
+                        <span class="text-xs text-slate-400">${item.date}</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-sm">${item.title}</h3>
+                    <p class="text-xs text-slate-500 mt-1">${item.summary}</p>
+                </a>`;
+                container.innerHTML += html;
+            });
+        } else {
+            container.innerHTML = '<p class="text-red-500 text-sm p-4">数据正在抓取中，请稍后刷新页面...</p>';
+        }
+    </script>
+</body>
+</html>
