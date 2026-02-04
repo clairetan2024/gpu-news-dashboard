@@ -22,11 +22,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      # --- 关键：增加了这一步 ---
+      # --- 修改点：直接安装，不需要文件 ---
       - name: 安装依赖库
         run: |
-          pip install -r requirements.txt
-      # ------------------------
+          pip install requests beautifulsoup4
+      # --------------------------------
 
       - name: 运行抓取脚本
         run: |
