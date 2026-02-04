@@ -5,9 +5,9 @@ import random
 from datetime import datetime
 import time
 
-# ================= 配置区 =================
+# ================= 配置区 (2025年底数据版) =================
 
-# 模拟真实浏览器，防止被当作机器人拦截
+# 模拟真实浏览器
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
@@ -16,22 +16,23 @@ HEADERS = {
     'Upgrade-Insecure-Requests': '1'
 }
 
-# 基准数据 (保持不变)
+# 2025 Q4 算力储备估算
 ENTERPRISE_DATA = [
-    {"name": "阿里 (Alibaba)", "count": "100,000+", "chips": "H800/A800/平头哥", "trend": "自研占比↑", "isHBM": False},
-    {"name": "腾讯 (Tencent)", "count": "90,000+", "chips": "H800/星脉网络", "trend": "混元扩容", "isHBM": True},
-    {"name": "字节跳动 (ByteDance)", "count": "150,000+", "chips": "H20/H800/L20", "trend": "极其激进", "isHBM": True},
-    {"name": "百度 (Baidu)", "count": "60,000+", "chips": "昆仑芯/昇腾/A800", "trend": "国产替代", "isHBM": False},
-    {"name": "华为 (Huawei Cloud)", "count": "Hidden", "chips": "Ascend 910B Cluster", "trend": "产能爬坡", "isHBM": True},
-    {"name": "金山云 (Kingsoft)", "count": "15,000+", "chips": "A100/H800", "trend": "小米生态", "isHBM": False},
+    {"name": "字节跳动 (ByteDance)", "count": "350,000+", "chips": "L20/自研/910C", "trend": "自研芯片量产", "isHBM": True},
+    {"name": "阿里 (Alibaba)", "count": "200,000+", "chips": "H20/倚天/910C", "trend": "通义千问2.5", "isHBM": False},
+    {"name": "腾讯 (Tencent)", "count": "180,000+", "chips": "星脉2.0/H20", "trend": "混元Turbo", "isHBM": True},
+    {"name": "百度 (Baidu)", "count": "120,000+", "chips": "昆仑芯3/昇腾", "trend": "全栈国产化", "isHBM": False},
+    {"name": "华为云 (Huawei)", "count": "Undefined", "chips": "Ascend 910C集群", "trend": "万卡集群商用", "isHBM": True},
+    {"name": "DeepSeek (幻方)", "count": "60,000+", "chips": "H800/A100存量", "trend": "开源黑马", "isHBM": True},
 ]
 
+# 2025 Q4 智驾算力池
 AUTO_DATA = [
-    {"name": "Tesla", "count": "100E (Dojo+H100)", "chipType": "HW4.0 / H100 Cluster", "news": "FSD v13 推送准备中"},
-    {"name": "华为车BU", "count": "3.5E FLOPS", "chipType": "Ascend 610/910", "news": "ADS 3.0 无图商用"},
-    {"name": "小鹏 (Xpeng)", "count": "2.51E FLOPS", "chipType": "扶摇架构/阿里云", "news": "端到端大模型上车"},
-    {"name": "理想 (Li Auto)", "count": "2.4E FLOPS", "chipType": "NVIDIA Orin-X 集群", "news": "训练里程破亿"},
-    {"name": "小米汽车", "count": "未公开 (高算力)", "chipType": "NVIDIA Orin + 云端", "news": "城市 NOA 快速开通"},
+    {"name": "Tesla", "count": "150E (Dojo v2)", "chipType": "AI5 / H100", "news": "FSD v13 全球推送"},
+    {"name": "华为车BU", "count": "7.5E FLOPS", "chipType": "Ascend 910C", "news": "ADS 4.0 预发布"},
+    {"name": "理想 (Li Auto)", "count": "5.2E FLOPS", "chipType": "Orin-X/云端", "news": "端到端+VLM落地"},
+    {"name": "小鹏 (Xpeng)", "count": "4.8E FLOPS", "chipType": "阿里云/扶摇", "news": "AI鹰眼视觉方案"},
+    {"name": "小米汽车", "count": "3.5E FLOPS", "chipType": "NVIDIA/自研", "news": "城市NOA全覆盖"},
 ]
 
 # ================= 核心抓取逻辑 =================
