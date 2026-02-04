@@ -32,7 +32,7 @@ AUTO_DATA = [
     {"name": "华为车BU", "count": "7.5E FLOPS", "chipType": "Ascend 910C", "news": "ADS 4.0 预发布"},
     {"name": "理想 (Li Auto)", "count": "5.2E FLOPS", "chipType": "Orin-X/云端", "news": "端到端+VLM落地"},
     {"name": "小鹏 (Xpeng)", "count": "4.8E FLOPS", "chipType": "阿里云/扶摇", "news": "AI鹰眼视觉方案"},
-    {"name": "小米汽车", "count": "3.5E FLOPS", "chipType": "NVIDIA/自研", "news": "城市NOA全覆盖"},
+    {"name": "小米汽车", "count": "7.0E FLOPS", "chipType": "NVIDIA/自研", "news": "端到端+点到点城市NOA"},
 ]
 
 # ================= 核心抓取逻辑 =================

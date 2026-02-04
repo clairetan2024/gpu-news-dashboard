@@ -1,5 +1,5 @@
 const gpuData = {
-  "updateTime": "2026-02-04 06:33",
+  "updateTime": "2026-02-04 12:24",
   "enterprise": [
     {
       "name": "字节跳动 (ByteDance)",
@@ -71,15 +71,15 @@ const gpuData = {
     },
     {
       "name": "小米汽车",
-      "count": "3.5E FLOPS",
+      "count": "7.0E FLOPS",
       "chipType": "NVIDIA/自研",
-      "news": "城市NOA全覆盖"
+      "news": "端到端+点到点城市NOA"
     }
   ],
   "news": [
     {
       "source": "System",
-      "date": "06:33",
+      "date": "12:24",
       "title": "当前网络波动，暂未获取到最新源，请稍后重试。",
       "url": "#"
     },
