@@ -1,5 +1,5 @@
 const gpuData = {
-  "updateTime": "2026-02-04 06:04",
+  "updateTime": "2026-02-04 06:07",
   "enterprise": [
     {
       "name": "阿里 (Alibaba)",
@@ -79,7 +79,7 @@ const gpuData = {
   "news": [
     {
       "source": "System",
-      "date": "06:04",
+      "date": "06:07",
       "title": "当前网络波动，暂未获取到最新源，请稍后重试。",
       "url": "#"
     },
