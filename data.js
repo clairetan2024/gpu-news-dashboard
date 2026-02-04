@@ -1,5 +1,5 @@
 const gpuData = {
-  "updateTime": "2026-02-04 06:00",
+  "updateTime": "2026-02-04 06:04",
   "enterprise": [
     {
       "name": "阿里 (Alibaba)",
@@ -42,13 +42,6 @@ const gpuData = {
       "chips": "A100/H800",
       "trend": "小米生态",
       "isHBM": false
-    },
-    {
-      "name": "小米 (Xiaomi)",
-      "count": "10,000+",
-      "chips": "A800/自研预研",
-      "trend": "模型训练中",
-      "isHBM": false
     }
   ],
   "auto": [
@@ -83,5 +76,18 @@ const gpuData = {
       "news": "城市 NOA 快速开通"
     }
   ],
-  "news": []
+  "news": [
+    {
+      "source": "System",
+      "date": "06:04",
+      "title": "当前网络波动，暂未获取到最新源，请稍后重试。",
+      "url": "#"
+    },
+    {
+      "source": "Market",
+      "date": "2024",
+      "title": "英伟达 B200 芯片出货预期向好 (历史数据)",
+      "url": "https://www.nvidia.com"
+    }
+  ]
 };
