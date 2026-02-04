@@ -3,171 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业级 GPU 算力储备监测看板</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- 引入数据文件 -->
-    <script src="data.js"></script>
+    <title>AI 行业算力情报看板</title>
     <style>
-        body { background-color: #f1f5f9; font-family: 'Inter', system-ui, sans-serif; }
-        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .table-row:nth-child(even) { background-color: #f8fafc; }
+        :root { --bg: #f3f4f6; --card: #ffffff; --text: #1f2937; --accent: #2563eb; --red: #dc2626; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { margin-bottom: 24px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.5rem; }
+        .update-time { color: #6b7280; font-size: 0.9rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px; }
+        
+        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .card-title::before { content: ''; display: block; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { text-align: left; color: #6b7280; font-weight: 500; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; }
+        td { padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+        .highlight { color: var(--accent); font-weight: 500; }
+
+        /* 新闻样式 */
+        .news-item { padding: 12px 0; border-bottom: 1px dashed #e5e7eb; }
+        .news-item:last-child { border-bottom: none; }
+        .news-meta { font-size: 0.8rem; color: #9ca3af; margin-bottom: 4px; }
+        .news-link { text-decoration: none; color: var(--text); font-weight: 500; display: block; line-height: 1.4; }
+        .news-link:hover { color: var(--accent); }
+        .source-tag { background: #eff6ff; color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; margin-right: 6px; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- 头部 -->
-        <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
-                    <i class="ph-fill ph-microchip text-indigo-600"></i> 全球 AI 算力储备监测
-                </h1>
-                <p class="text-slate-500 mt-1 text-sm">基于公开市场信息、财报及供应链推演模型 | 每日 T+1 更新</p>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                上次抓取: <span id="update-time" class="font-mono text-slate-600">--</span>
-            </div>
-        </header>
+<body>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <!-- 左侧：核心数据表 (占据 8 列) -->
-            <div class="lg:col-span-8 space-y-8">
-                
-                <!-- 1. 云厂商/互联网巨头 -->
-                <div class="glass-card overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                        <h2 class="font-bold text-slate-800 flex items-center gap-2">
-                            <i class="ph-fill ph-cloud text-blue-500"></i> 云厂商/互联网 GPU 存量估测
-                        </h2>
-                        <span class="text-xs text-slate-400 bg-slate-200 px-2 py-0.5 rounded">单位：万张 (等效 A100/H100)</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
-                                <tr>
-                                    <th class="px-6 py-3">厂商</th>
-                                    <th class="px-6 py-3 text-right">预估卡数</th>
-                                    <th class="px-6 py-3">主要架构</th>
-                                    <th class="px-6 py-3">趋势信号</th>
-                                </tr>
-                            </thead>
-                            <tbody id="enterprise-table" class="text-slate-700">
-                                <!-- JS 注入数据 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+<div class="container">
+    <header>
+        <h1>📡 AI 算力情报中心</h1>
+        <span class="update-time" id="update-time">加载中...</span>
+    </header>
 
-                <!-- 2. 自动驾驶 -->
-                <div class="glass-card overflow-hidden">
-                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                        <h2 class="font-bold text-slate-800 flex items-center gap-2">
-                            <i class="ph-fill ph-car text-orange-500"></i> 自动驾驶智算中心规模
-                        </h2>
-                        <span class="text-xs text-slate-400 bg-slate-200 px-2 py-0.5 rounded">单位：EFLOPS (FP16) / 卡数</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
-                                <tr>
-                                    <th class="px-6 py-3">车企/品牌</th>
-                                    <th class="px-6 py-3 text-right">算力规模/卡数</th>
-                                    <th class="px-6 py-3">自研芯片/平台</th>
-                                    <th class="px-6 py-3">最新动态</th>
-                                </tr>
-                            </thead>
-                            <tbody id="auto-table" class="text-slate-700">
-                                <!-- JS 注入数据 -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右侧：实时情报 (占据 4 列) -->
-            <div class="lg:col-span-4">
-                <div class="glass-card h-full flex flex-col" style="max-height: 800px;">
-                    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                            <i class="ph-fill ph-lightning text-yellow-500"></i> 行业信号捕捉
-                        </h3>
-                    </div>
-                    <div id="news-container" class="overflow-y-auto p-4 space-y-4 flex-1">
-                        <!-- JS 注入新闻 -->
-                    </div>
-                </div>
-            </div>
+    <!-- 核心指标区域 -->
+    <div class="grid">
+        <!-- 企业算力 -->
+        <div class="card">
+            <div class="card-title">互联网巨头算力储备</div>
+            <div id="enterprise-list"></div>
+        </div>
+        
+        <!-- 车企算力 -->
+        <div class="card">
+            <div class="card-title">智能驾驶算力池</div>
+            <div id="auto-list"></div>
         </div>
     </div>
 
-    <script>
-        // 渲染函数
-        function renderDashboard() {
-            if (typeof gpuData === 'undefined') return;
+    <!-- 实时新闻区域 -->
+    <div class="card">
+        <div class="card-title">⚡ 行业实时动态 (抓取自 IT之家/新浪)</div>
+        <div id="news-list">加载数据中...</div>
+    </div>
+</div>
 
-            // 1. 更新时间
-            document.getElementById('update-time').innerText = gpuData.updateTime;
+<!-- ⚠️ 关键：引入数据文件 -->
+<script src="data.js"></script>
 
-            // 2. 渲染企业表
-            const entTable = document.getElementById('enterprise-table');
-            let entHtml = '';
-            gpuData.enterprise.forEach(item => {
-                entHtml += `
-                <tr class="table-row border-b border-slate-50 hover:bg-slate-100 transition-colors">
-                    <td class="px-6 py-4 font-medium text-slate-900 flex items-center gap-2">
-                        ${item.name}
-                        ${item.isHBM ? '<span class="text-[10px] bg-red-100 text-red-600 px-1 rounded">HBM紧缺</span>' : ''}
-                    </td>
-                    <td class="px-6 py-4 text-right font-mono font-bold text-indigo-600">${item.count}</td>
-                    <td class="px-6 py-4 text-xs text-slate-500">${item.chips}</td>
-                    <td class="px-6 py-4">
-                        <span class="text-xs px-2 py-1 rounded-full ${item.trend.includes('↑') ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">
-                            ${item.trend}
-                        </span>
-                    </td>
-                </tr>`;
-            });
-            entTable.innerHTML = entHtml;
-
-            // 3. 渲染自动驾驶表
-            const autoTable = document.getElementById('auto-table');
-            let autoHtml = '';
-            gpuData.auto.forEach(item => {
-                autoHtml += `
-                <tr class="table-row border-b border-slate-50 hover:bg-slate-100 transition-colors">
-                    <td class="px-6 py-4 font-medium text-slate-900">${item.name}</td>
-                    <td class="px-6 py-4 text-right font-mono font-bold text-orange-600">${item.count}</td>
-                    <td class="px-6 py-4 text-xs text-slate-500">${item.chipType}</td>
-                    <td class="px-6 py-4 text-xs text-slate-500 truncate max-w-[150px]" title="${item.news}">
-                        ${item.news}
-                    </td>
-                </tr>`;
-            });
-            autoTable.innerHTML = autoHtml;
-
-            // 4. 渲染新闻
-            const newsBox = document.getElementById('news-container');
-            let newsHtml = '';
-            gpuData.news.forEach(news => {
-                newsHtml += `
-                <a href="${news.url}" target="_blank" class="block group">
-                    <div class="flex justify-between items-start mb-1">
-                        <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">${news.source}</span>
-                        <span class="text-[10px] text-slate-400">${news.date}</span>
-                    </div>
-                    <h4 class="text-sm font-medium text-slate-800 group-hover:text-blue-600 transition-colors leading-snug mb-1">
-                        ${news.title}
-                    </h4>
-                </a>
-                <hr class="border-slate-100 mt-3"/>
-                `;
-            });
-            newsBox.innerHTML = newsHtml;
+<script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', () => {
+        // 检查数据是否存在
+        if (typeof gpuData === 'undefined') {
+            document.getElementById('news-list').innerHTML = 
+                '<div style="color:red; padding:20px; text-align:center;">❌ 错误：未找到 data.js 数据文件。<br>请检查 GitHub Actions 是否成功运行。</div>';
+            return;
         }
 
-        renderDashboard();
-    </script>
+        // 1. 更新时间
+        document.getElementById('update-time').textContent = "最后更新: " + gpuData.updateTime;
+
+        // 2. 渲染企业表格
+        let entHtml = '<table><tr><th>企业</th><th>芯片/集群</th><th>趋势</th></tr>';
+        gpuData.enterprise.forEach(item => {
+            entHtml += `<tr>
+                <td style="font-weight:500">${item.name.split(' ')[0]}</td>
+                <td style="font-size:0.85rem">${item.chips}</td>
+                <td class="highlight">${item.trend}</td>
+            </tr>`;
+        });
+        entHtml += '</table>';
+        document.getElementById('enterprise-list').innerHTML = entHtml;
+
+        // 3. 渲染车企表格
+        let autoHtml = '<table><tr><th>车企</th><th>算力规模</th><th>进展</th></tr>';
+        gpuData.auto.forEach(item => {
+            autoHtml += `<tr>
+                <td style="font-weight:500">${item.name.split(' ')[0]}</td>
+                <td style="font-size:0.85rem">${item.count}</td>
+                <td style="font-size:0.85rem">${item.news}</td>
+            </tr>`;
+        });
+        autoHtml += '</table>';
+        document.getElementById('auto-list').innerHTML = autoHtml;
+
+        // 4. 渲染新闻列表
+        let newsHtml = '';
+        if (gpuData.news && gpuData.news.length > 0) {
+            gpuData.news.forEach(news => {
+                newsHtml += `<div class="news-item">
+                    <div class="news-meta">
+                        <span class="source-tag">${news.source}</span>
+                        ${news.date}
+                    </div>
+                    <a href="${news.url}" target="_blank" class="news-link">${news.title}</a>
+                </div>`;
+            });
+        } else {
+            newsHtml = '<div style="padding:20px; color:#999">暂无最新消息</div>';
+        }
+        document.getElementById('news-list').innerHTML = newsHtml;
+    });
+</script>
+
 </body>
 </html>
