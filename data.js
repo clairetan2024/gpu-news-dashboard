@@ -1,5 +1,5 @@
 const gpuData = {
-  "updateTime": "2026-02-18 20:28",
+  "updateTime": "2026-02-19 20:21",
   "enterprise": [
     {
       "name": "字节跳动 (ByteDance)",
@@ -79,7 +79,7 @@ const gpuData = {
   "news": [
     {
       "source": "System",
-      "date": "20:28",
+      "date": "20:21",
       "title": "当前网络波动，暂未获取到最新源，请稍后重试。",
       "url": "#"
     },
